@@ -6,9 +6,13 @@ def segment_trees(point_cloud_path, eps=0.5, min_samples=10):
     # Load point cloud
     pcd = o3d.io.read_point_cloud(point_cloud_path)
     points = np.asarray(pcd.points)
+    if points.size == 0:
+        raise RuntimeError("Point cloud is empty. Check SfM output.")
     
     # Filter by height (assume Z is up; trees >2m)
     filtered_points = points[points[:, 2] > 2.0]
+    if filtered_points.size == 0:
+        raise RuntimeError("No points above height threshold. Try lowering the 2.0m cutoff.")
     
     # DBSCAN clustering
     db = DBSCAN(eps=eps, min_samples=min_samples).fit(filtered_points)
