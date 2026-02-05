@@ -3,9 +3,12 @@ import os
 
 def run_sfm(frames_dir, output_dir):
     # COLMAP commands for SfM (assumes COLMAP in PATH)
+    os.makedirs(output_dir, exist_ok=True)
     database_path = os.path.join(output_dir, "database.db")
     sparse_dir = os.path.join(output_dir, "sparse")
     dense_dir = os.path.join(output_dir, "dense")
+    os.makedirs(sparse_dir, exist_ok=True)
+    os.makedirs(dense_dir, exist_ok=True)
     
     # Feature extraction (lens correction handled here)
     subprocess.run(["colmap", "feature_extractor", "--database_path", database_path, "--image_path", frames_dir])

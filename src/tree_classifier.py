@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.cluster import HDBSCAN
 
 def classify_species(trees):
     results = []
@@ -16,12 +15,6 @@ def classify_species(trees):
             species = "Oak (medium)"
         else:
             species = "Unknown"
-        
-        # Unsupervised clustering (for automation)
-        features = np.array([[height, width, ratio]])
-        clusterer = HDBSCAN(min_cluster_size=1)
-        labels = clusterer.fit_predict(features)
-        species += f" (Cluster {labels[0]})"
         
         results.append({"species": species, "height": height, "width": width})
     
