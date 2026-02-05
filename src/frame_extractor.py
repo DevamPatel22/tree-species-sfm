@@ -20,4 +20,8 @@ def extract_frames(video_path, output_dir, blur_threshold=100):
             extracted.append(frame_path)
         frame_count += 1
     cap.release()
+    if not extracted:
+        raise RuntimeError(
+            "No frames were extracted. Check the video path and blur_threshold."
+        )
     return extracted
