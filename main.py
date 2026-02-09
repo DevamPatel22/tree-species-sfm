@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 from src.colmap_runner import run_sfm
 from src.vggt_runner import run_vggt_pointcloud
 
@@ -20,6 +21,18 @@ def _list_frames(frames_dir):
         if f.lower().endswith(".jpg")
     ]
     return frames
+
+
+def _next_vggt_output_path(output_dir):
+    vggt_dir = os.path.join(output_dir, "vggt")
+    os.makedirs(vggt_dir, exist_ok=True)
+    pattern = re.compile(r"^vggt_points_rgb_run(\d+)\.ply$")
+    max_run = 0
+    for name in os.listdir(vggt_dir):
+        match = pattern.match(name)
+        if match:
+            max_run = max(max_run, int(match.group(1)))
+    return os.path.join(vggt_dir, f"vggt_points_rgb_run{max_run + 1}.ply")
 
 
 def main(
@@ -50,7 +63,7 @@ def main(
         selected = _pick_evenly(frames, vggt_frames)
         pc = run_vggt_pointcloud(
             image_paths=selected,
-            output_ply=os.path.join(output_dir, "vggt", "vggt_points_rgb.ply"),
+            output_ply=_next_vggt_output_path(output_dir),
         )
 
     if not skip_postprocess:
