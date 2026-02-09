@@ -1,5 +1,11 @@
 venv/
+venv-vggt/
 .DS_Store
 __pycache__/
 *.pyc
+external/
+results/
 
+venv-vggt/
+external/
+results/
